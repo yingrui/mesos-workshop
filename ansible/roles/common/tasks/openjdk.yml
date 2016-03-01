@@ -1,0 +1,3 @@
+---
+- name: install openjdk {{ jdk_version }}
+  yum: name=java-{{ jdk_version }}-openjdk* state=latest

@@ -1,0 +1,9 @@
+---
+- hosts: mesos-cluster
+  roles:
+     - common
+  vars:
+    version: 1.0
+  remote_user: vagrant
+  become: yes
+  become_user: root

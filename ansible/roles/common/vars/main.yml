@@ -1,0 +1,2 @@
+# file: roles/common/vars/main.yml
+jdk_version: 1.8.0
