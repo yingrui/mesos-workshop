@@ -1,0 +1,16 @@
+---
+  # file: roles/maven/tasks/main.yml
+  - name: collect maven binary file info
+    stat: path=/tmp/apache-maven-{{ maven_version }}-bin.tar.gz
+    register: maven_bin_file
+
+  - name: download maven
+    get_url: url=http://mirrors.cnnic.cn/apache/maven/maven-3/{{ maven_version }}/binaries/apache-maven-{{ maven_version }}-bin.tar.gz dest=/tmp timeout=300 checksum=md5:516923b3955b6035ba6b0a5b031fbd8b
+    when: maven_bin_file.stat.exists == False
+
+  - name: unarchive downloaded file
+    unarchive: src=/tmp/apache-maven-{{ maven_version }}-bin.tar.gz dest=/usr/local copy=no owner={{ ansible_ssh_user }}
+    when: maven_bin_file.stat.exists == True
+
+  - name: link to /usr/local/bin
+    file: src=/usr/local/apache-maven-{{ maven_version }}/bin/mvn dest=/usr/local/bin/mvn state=link
