@@ -1,3 +1,6 @@
 ---
-# file: roles/common/tasks/main.yml
-- include: roles/common/tasks/openjdk.yml
+  # file: roles/common/tasks/main.yml
+  - include: roles/common/tasks/openjdk.yml
+
+  - name: install c++ devel packages
+    yum: name="@Development tools" state=present
