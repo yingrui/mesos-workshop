@@ -3,6 +3,7 @@
   roles:
      - common
      - maven
+     - mesos
   vars:
     version: 1.0
   remote_user: vagrant

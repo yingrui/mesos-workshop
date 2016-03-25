@@ -1,3 +1,6 @@
 ---
-- name: install openjdk {{ jdk_version }}
-  yum: name=java-{{ jdk_version }}-openjdk* state=latest
+  - name: install openjdk {{ jdk_version }}
+    yum: name=java-{{ jdk_version }}-openjdk* state=latest
+
+  - name: set jdk
+    alternatives: name=java path=/usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java

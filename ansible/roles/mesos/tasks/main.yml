@@ -1,0 +1,24 @@
+---
+  # file: roles/mesos/tasks/main.yml
+  - name: collect mesos binary file info
+    stat: path=/tmp/mesos-{{ mesos_version }}.tar.gz
+    register: mesos_bin_file
+
+  - name: download mesos
+    get_url: url=http://mirrors.cnnic.cn/apache/mesos/{{ mesos_version }}/mesos-{{ mesos_version }}.tar.gz dest=/tmp timeout=300 checksum=md5:9504a8ec96631313a542bc7e75f19a18
+    when: mesos_bin_file.stat.exists == False
+
+  - name: collect mesos folder info
+    stat: path=/usr/local/mesos-{{ mesos_version }}
+    register: mesos_folder_file
+
+  - name: unarchive downloaded mesos file
+    unarchive: src=/tmp/mesos-{{ mesos_version }}.tar.gz dest=/usr/local copy=no owner={{ ansible_ssh_user }} group={{ ansible_ssh_user }}
+    when: mesos_folder_file.stat.exists == False
+
+  - name: make mesos
+    script: ../scripts/compile-mesos.sh
+
+  - name: disable iptables
+    service: name=iptables state=stopped
+    become: yes

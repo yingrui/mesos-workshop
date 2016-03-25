@@ -1,6 +1,36 @@
 ---
   # file: roles/common/tasks/main.yml
-  - include: roles/common/tasks/openjdk.yml
-
   - name: install c++ devel packages
     yum: name="@Development tools" state=present
+
+  - name: check devtool repo
+    stat: path=/etc/yum.repos.d/slc6-devtoolset.repo
+    register: repo_file
+
+  - name: import devtool repository for gcc 4.8
+    get_url: url=http://linuxsoft.cern.ch/cern/devtoolset/slc6-devtoolset.repo dest=/etc/yum.repos.d/
+    become: yes
+    when: repo_file.stat.exists == False
+
+  - name: install gcc 4.8
+    yum: name=devtoolset-2 disable_gpg_check=yes
+
+  - name: enable devtoolset-2
+    lineinfile: dest=/home/vagrant/.bash_profile line="source /opt/rh/devtoolset-2/enable"
+
+  - name: install libcurl
+    yum: name=libcurl-devel state=present
+
+  - name: install apr-devel
+    yum: name=apr-devel state=present
+
+  - name: install subversion-devel
+    yum: name=subversion-devel state=present
+
+  - name: install cyrus-sasl-md5
+    yum: name=cyrus-sasl-md5 state=present
+
+  - name: install python-devel
+    yum: name=python-devel state=present
+
+  - include: roles/common/tasks/openjdk.yml

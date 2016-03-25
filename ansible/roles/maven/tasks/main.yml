@@ -10,7 +10,6 @@
 
   - name: unarchive downloaded file
     unarchive: src=/tmp/apache-maven-{{ maven_version }}-bin.tar.gz dest=/usr/local copy=no owner={{ ansible_ssh_user }}
-    when: maven_bin_file.stat.exists == True
 
   - name: link to /usr/local/bin
     file: src=/usr/local/apache-maven-{{ maven_version }}/bin/mvn dest=/usr/local/bin/mvn state=link
